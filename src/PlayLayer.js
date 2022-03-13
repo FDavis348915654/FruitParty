@@ -3,6 +3,7 @@
  * 游戏逻辑图层
  */
 MyGame.GAME_PLAY_STATE = {IDLE: "IDLE", START: "START", RUN: "RUN", END: "END"};
+MyGame.RAND_TYPES = [0, 1, 1, 1, 2, 2, 2, 3, 3, 3];
 
 MyGame.PlayLayer = cc.Layer.extend({
     m_state: null,
@@ -53,13 +54,16 @@ MyGame.PlayLayer = cc.Layer.extend({
                 var winSize = cc.winSize;
                 var thisLayer = this;
                 var sprite = null;
+                var randLength = MyGame.RAND_TYPES.length
 
                 cc.warn("randCount: " + randCount);
 
                 for (var i = 0; i < randCount; i++) {
-                    randType = ~~(4 * Math.random());
+                    var randIndex = ~~(randLength * Math.random())
+                    randType = MyGame.RAND_TYPES[randIndex];
                     sprite = new cc.Sprite("res/" + MyGame.g_style + "item_" + randType + ".png");
 
+                    sprite.setLocalZOrder(0 == randType ? 0 : 1);
                     sprite.m_isDead = false;
                     sprite.m_type = randType;
                     sprite.m_touchListener = cc.EventListener.create({
